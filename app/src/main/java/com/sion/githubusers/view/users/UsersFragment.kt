@@ -5,7 +5,9 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.sion.githubusers.R
+import com.sion.githubusers.model.vo.GithubUser
 import com.sion.githubusers.view.base.BaseFragment
+import com.sion.githubusers.view.userdetail.UserDetailDialogFragment
 import kotlinx.android.synthetic.main.fragment_users.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -16,7 +18,11 @@ class UsersFragment : BaseFragment() {
     private val viewModel: UsersViewModel by viewModels()
     override fun getLayoutId() = R.layout.fragment_users
 
-    private val userAdapter by lazy { UserAdapter() }
+
+    private val userFuncItem = UserFuncItem(
+        onUserItemClick = { userItem -> goDetail(userItem) }
+    )
+    private val userAdapter by lazy { UserAdapter(userFuncItem) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -33,5 +39,12 @@ class UsersFragment : BaseFragment() {
                 (rv_users.adapter as UserAdapter).submitData(it)
             }
         }
+    }
+
+    private fun goDetail(item: GithubUser) {
+        UserDetailDialogFragment(item.name).show(
+            requireActivity().supportFragmentManager,
+            UsersFragment::class.java.simpleName
+        )
     }
 }

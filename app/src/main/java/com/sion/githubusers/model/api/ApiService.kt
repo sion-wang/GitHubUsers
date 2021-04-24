@@ -15,4 +15,10 @@ interface ApiService {
         @Query("since") since: Int = 0,
         @Query("per_page") per_page: Int = 20
     ): Response<List<GithubUser>>
+
+    @Headers("Accept: application/vnd.github.v3+json")
+    @GET("/user/{username}")
+    suspend fun getUserByName(
+        @Path("username") username: String = "",
+    ): Response<GithubUser>
 }

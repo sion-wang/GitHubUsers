@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import com.sion.githubusers.R
 import com.sion.githubusers.model.vo.GithubUser
 
-class UserAdapter : PagingDataAdapter<GithubUser, UserViewHolder>(diffCallback) {
+class UserAdapter(private val userFuncItem: UserFuncItem) : PagingDataAdapter<GithubUser, UserViewHolder>(diffCallback) {
 
     companion object {
         private val diffCallback = object : DiffUtil.ItemCallback<GithubUser>() {
@@ -28,7 +28,7 @@ class UserAdapter : PagingDataAdapter<GithubUser, UserViewHolder>(diffCallback) 
     }
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
-        getItem(position)?.run { holder.onBind(this) }
+        getItem(position)?.run { holder.onBind(this, userFuncItem) }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
