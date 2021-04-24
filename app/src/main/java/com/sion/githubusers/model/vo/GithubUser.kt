@@ -1,6 +1,7 @@
 package com.sion.githubusers.model.vo
 
 data class GithubUser(
+    val id: Int = -1,
     val login: String = "",
     val avatar_url: String = "",
     val site_admin: Boolean = false

@@ -1,25 +1,25 @@
 package com.sion.githubusers.view.users
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.sion.githubusers.model.api.ApiRepository
+import com.sion.githubusers.model.vo.GithubUser
 import com.sion.githubusers.view.base.BaseViewModel
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.Flow
 import org.koin.core.component.KoinApiExtension
-import timber.log.Timber
 
 @KoinApiExtension
 class UsersViewModel : BaseViewModel() {
-    fun getUsers() {
-        viewModelScope.launch {
-            apiRepository.getUsers()
-                .catch {
-                    Timber.e(it)
-                }
-                .collect {
-                    Timber.d("@@$it")
-                }
-        }
+    fun getUsers(): Flow<PagingData<GithubUser>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = ApiRepository.NETWORK_PAGE_SIZE,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { UserPagingSource(apiRepository) }
+        ).flow.cachedIn(viewModelScope)
     }
 }

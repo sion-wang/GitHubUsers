@@ -8,15 +8,11 @@ import retrofit2.Response
 
 class ApiRepository(private val apiService: ApiService) {
 
-    fun getUsers(): Flow<Response<List<GithubUser>>> {
-        return flow {
-            emit(apiService.getUsers())
-        }.flowOn(Dispatchers.IO).map {
-            if (it.isSuccessful) {
-                return@map it
-            } else {
-                throw HttpException(it)
-            }
-        }
+    companion object {
+        const val NETWORK_PAGE_SIZE = 20
+    }
+
+    suspend fun getUsers(since: Int, perPage: Int = NETWORK_PAGE_SIZE): Response<List<GithubUser>> {
+        return apiService.getUsers(since, perPage)
     }
 }
