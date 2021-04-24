@@ -13,7 +13,7 @@ import org.koin.core.component.KoinApiExtension
 import timber.log.Timber
 
 @KoinApiExtension
-class UserDetailDialogFragment(val name: String): BaseDialogFragment() {
+class UserDetailDialogFragment(val name: String) : BaseDialogFragment() {
 
     private val viewModel: UserDetailViewModel by viewModels()
 
@@ -24,8 +24,10 @@ class UserDetailDialogFragment(val name: String): BaseDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        ib_close.setOnClickListener { dismiss() }
+
         viewModel.getUser.observe(viewLifecycleOwner) {
-            when(it) {
+            when (it) {
                 is ApiResult.Loaded -> progress_bar.visibility = View.GONE
                 is ApiResult.Loading -> progress_bar.visibility = View.VISIBLE
                 is ApiResult.Error -> Timber.e(it.throwable)
@@ -37,7 +39,8 @@ class UserDetailDialogFragment(val name: String): BaseDialogFragment() {
     }
 
     private fun setupUI(item: GithubUser) {
-        Glide.with(requireContext()).load(item.avatar_url).circleCrop().into(iv_avatar)
+        Glide.with(requireContext()).load(item.avatar_url).placeholder(R.drawable.user).circleCrop()
+            .into(iv_avatar)
         tv_name.text = item.name
         tv_bio.text = item.bio
         tv_login.text = item.login
