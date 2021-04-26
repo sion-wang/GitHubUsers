@@ -14,7 +14,6 @@ import kotlinx.android.synthetic.main.fragment_users.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinApiExtension
-import timber.log.Timber
 
 @KoinApiExtension
 class UsersFragment : BaseFragment() {
@@ -24,22 +23,27 @@ class UsersFragment : BaseFragment() {
     private val userFuncItem = UserFuncItem(
         onUserItemClick = { userItem -> goDetail(userItem) }
     )
-    private val userAdapter by lazy {
-        val adapter = UserAdapter(userFuncItem)
-        val loadStateListener = { loadStatus: CombinedLoadStates ->
-            when (loadStatus.refresh) {
-                is LoadState.Error -> progress_bar.visibility = View.GONE
-                is LoadState.Loading -> progress_bar.visibility = View.VISIBLE
-                is LoadState.NotLoading -> {
-                    progress_bar.visibility = View.GONE
-                }
+
+    private val loadStateListener = { loadStatus: CombinedLoadStates ->
+        when (loadStatus.refresh) {
+            is LoadState.Error -> {
+                showDialog()
+                progress_bar.visibility = View.GONE
             }
-            when (loadStatus.append) {
-                is LoadState.Error -> Timber.e("append Error:${(loadStatus.append as LoadState.Error).error.localizedMessage}")
-                is LoadState.Loading -> Timber.d("append Loading endOfPaginationReached:${(loadStatus.append as LoadState.Loading).endOfPaginationReached}")
-                is LoadState.NotLoading -> Timber.d("append NotLoading endOfPaginationReached:${(loadStatus.append as LoadState.NotLoading).endOfPaginationReached}")
+            is LoadState.Loading -> progress_bar.visibility = View.VISIBLE
+            is LoadState.NotLoading -> {
+                progress_bar.visibility = View.GONE
             }
         }
+        when (loadStatus.append) {
+            is LoadState.Error -> {}
+            is LoadState.Loading -> {}
+            is LoadState.NotLoading -> {}
+        }
+    }
+
+    private val userAdapter by lazy {
+        val adapter = UserAdapter(userFuncItem)
         adapter.addLoadStateListener(loadStateListener)
         adapter
     }

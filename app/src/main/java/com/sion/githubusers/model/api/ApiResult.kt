@@ -1,5 +1,13 @@
 package com.sion.githubusers.model.api
 
+/**
+ * Api狀態
+ *
+ * [loading]: 等待response
+ * [loaded]: api request結束，不管成功失敗
+ * [error]: api request error, 附上錯誤資訊
+ * [success]: api request success, 附上response data
+ */
 sealed class ApiResult<T> {
     companion object {
         fun <T> loading(): ApiResult<T> {

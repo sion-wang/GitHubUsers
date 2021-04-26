@@ -10,6 +10,7 @@ import com.sion.githubusers.model.vo.GithubUser
 import com.sion.githubusers.view.base.BaseDialogFragment
 import kotlinx.android.synthetic.main.fragment_user_detail.*
 import org.koin.core.component.KoinApiExtension
+import retrofit2.HttpException
 import timber.log.Timber
 
 @KoinApiExtension
@@ -30,11 +31,12 @@ class UserDetailDialogFragment(val name: String) : BaseDialogFragment() {
             when (it) {
                 is ApiResult.Loaded -> progress_bar.visibility = View.GONE
                 is ApiResult.Loading -> progress_bar.visibility = View.VISIBLE
-                is ApiResult.Error -> Timber.e(it.throwable)
+                is ApiResult.Error -> { showDialog() }
                 is ApiResult.Success -> it.result?.run { setupUI(this) }
             }
         }
 
+        progress_bar.visibility = View.VISIBLE
         viewModel.getUser(name)
     }
 

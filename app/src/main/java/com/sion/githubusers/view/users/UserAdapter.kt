@@ -6,7 +6,6 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.sion.githubusers.R
 import com.sion.githubusers.model.vo.GithubUser
-import timber.log.Timber
 
 class UserAdapter(private val userFuncItem: UserFuncItem) :
     PagingDataAdapter<GithubUser, UserViewHolder>(diffCallback) {
