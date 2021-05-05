@@ -6,7 +6,7 @@ import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
 import com.sion.githubusers.R
 
-class PostsLoadStateAdapter : LoadStateAdapter<NetworkStateItemViewHolder>() {
+class BaseLoadStateAdapter : LoadStateAdapter<NetworkStateItemViewHolder>() {
     override fun onBindViewHolder(holder: NetworkStateItemViewHolder, loadState: LoadState) {
         holder.onBind(loadState)
     }
