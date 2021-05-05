@@ -9,6 +9,7 @@ import androidx.paging.LoadState
 import com.sion.githubusers.R
 import com.sion.githubusers.model.vo.GithubUser
 import com.sion.githubusers.view.base.BaseFragment
+import com.sion.githubusers.view.base.footer.PostsLoadStateAdapter
 import com.sion.githubusers.view.userdetail.UserDetailDialogFragment
 import kotlinx.android.synthetic.main.fragment_users.*
 import kotlinx.coroutines.flow.collectLatest
@@ -52,7 +53,7 @@ class UsersFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         if (rv_users.adapter == null) {
-            rv_users.adapter = userAdapter
+            rv_users.adapter = userAdapter.withLoadStateFooter(PostsLoadStateAdapter())
             getUsers()
         }
     }
