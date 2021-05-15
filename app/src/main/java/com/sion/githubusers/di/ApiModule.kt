@@ -1,12 +1,11 @@
 package com.sion.githubusers.di
 
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.TypeAdapterFactory
 import com.sion.githubusers.BuildConfig
-import com.sion.githubusers.model.api.ApiRepository
-import com.sion.githubusers.model.api.ApiService
+import com.sion.githubusers.model.api.user.UserApiRepository
+import com.sion.githubusers.model.api.user.UserApiService
 import com.sion.githubusers.model.api.GithubInterceptor
+import com.sion.githubusers.model.api.user.IUserApiRepository
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module
@@ -18,8 +17,8 @@ val apiModule = module {
     single { provideGithubInterceptor() }
     single { provideHttpLoggingInterceptor() }
     single { provideOkHttpClient(get(), get()) }
-    single { provideApiService(get()) }
-    single { provideApiRepository(get()) }
+    single { provideUserApiService(get()) }
+    single { provideUserApiRepository(get()) }
 }
 
 fun provideGithubInterceptor(): GithubInterceptor {
@@ -45,15 +44,15 @@ fun provideOkHttpClient(
     return builder.build()
 }
 
-fun provideApiService(okHttpClient: OkHttpClient): ApiService {
+fun provideUserApiService(okHttpClient: OkHttpClient): UserApiService {
     return Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create(Gson()))
         .client(okHttpClient)
         .baseUrl(BuildConfig.GITHUB_API_HOST)
         .build()
-        .create(ApiService::class.java)
+        .create(UserApiService::class.java)
 }
 
-fun provideApiRepository(apiService: ApiService): ApiRepository {
-    return ApiRepository(apiService)
+fun provideUserApiRepository(userApiService: UserApiService): IUserApiRepository {
+    return UserApiRepository(userApiService)
 }

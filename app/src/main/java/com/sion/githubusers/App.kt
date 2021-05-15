@@ -2,6 +2,7 @@ package com.sion.githubusers
 
 import android.app.Application
 import com.sion.githubusers.di.apiModule
+import com.sion.githubusers.di.viewModelModule
 import com.sion.githubusers.widget.log.DebugLogTree
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -18,7 +19,8 @@ class App: Application() {
         }
 
         val module = listOf(
-            apiModule
+            apiModule,
+            viewModelModule
         )
 
         startKoin {
