@@ -6,6 +6,7 @@ import com.sion.githubusers.allRemoteUser
 import com.sion.githubusers.model.api.user.FakeUserApiService
 import com.sion.githubusers.model.api.user.IUserApiRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers
 import org.hamcrest.MatcherAssert.assertThat
@@ -15,6 +16,7 @@ import org.junit.Rule
 import org.junit.Test
 import kotlin.time.ExperimentalTime
 
+@ExperimentalTime
 @ExperimentalCoroutinesApi
 class UsersViewModelTest {
 
@@ -30,7 +32,6 @@ class UsersViewModelTest {
         usersViewModel = UsersViewModel(fakeUserApiRepository)
     }
 
-    @ExperimentalTime
     @Test
     fun testGetUsers() = runBlockingTest {
         val flow = usersViewModel.getUsers()
