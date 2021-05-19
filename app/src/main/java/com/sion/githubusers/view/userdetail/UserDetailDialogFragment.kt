@@ -2,21 +2,19 @@ package com.sion.githubusers.view.userdetail
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import com.sion.githubusers.R
 import com.sion.githubusers.model.api.ApiResult
 import com.sion.githubusers.model.vo.GithubUser
 import com.sion.githubusers.view.base.BaseDialogFragment
 import kotlinx.android.synthetic.main.fragment_user_detail.*
+import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.component.KoinApiExtension
-import retrofit2.HttpException
-import timber.log.Timber
 
 @KoinApiExtension
 class UserDetailDialogFragment(val name: String) : BaseDialogFragment() {
 
-    private val viewModel: UserDetailViewModel by viewModels()
+    private val viewModel: UserDetailViewModel by viewModel()
 
     override fun isFullLayout() = true
 

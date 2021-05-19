@@ -10,8 +10,9 @@ import com.sion.githubusers.model.api.user.UserApiRepository
 import com.sion.githubusers.model.vo.GithubUser
 import com.sion.githubusers.view.base.BaseViewModel
 import kotlinx.coroutines.flow.Flow
+import org.jetbrains.annotations.TestOnly
 
-class UsersViewModel(private val userApiRepository: IUserApiRepository) : BaseViewModel() {
+class UsersViewModel(private var userApiRepository: IUserApiRepository) : BaseViewModel() {
     fun getUsers(): Flow<PagingData<GithubUser>> {
         return Pager(
             config = PagingConfig(
@@ -20,5 +21,10 @@ class UsersViewModel(private val userApiRepository: IUserApiRepository) : BaseVi
             ),
             pagingSourceFactory = { UserPagingSource(userApiRepository) }
         ).flow.cachedIn(viewModelScope)
+    }
+
+    @TestOnly
+    fun setApiRepository(repository: IUserApiRepository) {
+        userApiRepository = repository
     }
 }

@@ -2,11 +2,11 @@ package com.sion.githubusers.view.users
 
 import android.os.Bundle
 import android.view.View
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
 import com.sion.githubusers.R
+import com.sion.githubusers.model.api.user.IUserApiRepository
 import com.sion.githubusers.model.vo.GithubUser
 import com.sion.githubusers.view.base.BaseFragment
 import com.sion.githubusers.view.base.footer.BaseLoadStateAdapter
@@ -14,11 +14,21 @@ import com.sion.githubusers.view.userdetail.UserDetailDialogFragment
 import kotlinx.android.synthetic.main.fragment_users.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import org.koin.android.viewmodel.ext.android.viewModel
 import org.koin.core.component.KoinApiExtension
 
 @KoinApiExtension
 class UsersFragment : BaseFragment() {
-    private val viewModel: UsersViewModel by viewModels()
+    companion object {
+        private const val KEY_REPO = "key.repo"
+        fun createBundle(repository: IUserApiRepository): Bundle {
+            val bundle = Bundle()
+            bundle.putSerializable(KEY_REPO, repository)
+            return bundle
+        }
+    }
+
+    private val viewModel: UsersViewModel by viewModel()
     override fun getLayoutId() = R.layout.fragment_users
 
     private val userFuncItem = UserFuncItem(
@@ -51,7 +61,10 @@ class UsersFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        arguments?.getSerializable(KEY_REPO)?.also {
+            it as IUserApiRepository
+            viewModel.setApiRepository(it)
+        }
         if (rv_users.adapter == null) {
             rv_users.adapter = userAdapter.withLoadStateFooter(BaseLoadStateAdapter())
             getUsers()

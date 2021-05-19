@@ -36,7 +36,7 @@ class UserApiRepositoryTest {
     fun testGetUsers_request0toEnd() = runBlockingTest {
         val response = userApiRepository.getUsers(8, 5)
         val result = response.body()
-        val expected = allRemoteUser.subList(8, allRemoteUser.size)
+        val expected = allRemoteUser.subList(8, 13)
 
         assertThat(result, IsEqual(expected))
     }
